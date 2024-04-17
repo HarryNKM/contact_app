@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:contact_app/screen/home/provider/conntact_provider.dart';
 
 import 'package:flutter/material.dart';
@@ -14,6 +16,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -21,9 +25,12 @@ class _HomeScreenState extends State<HomeScreen> {
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         actions: [
-          ElevatedButton.icon(onPressed: () {
-            Navigator.pushNamed(context, 'detail');
-          }, icon: Icon(Icons.add), label: Text("hi")),
+          ElevatedButton.icon(
+              onPressed: () {
+                Navigator.pushNamed(context, 'detail');
+              },
+              icon: Icon(Icons.add),
+              label: Text("hi")),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -33,16 +40,27 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Icon(Icons.add),
       ),
       body: Consumer<ContactProvider>(
-        builder: (context, value, child) =>  ListView.builder(
+        builder: (context, value, child) => ListView.builder(
           itemCount: value.ContactList.length,
           itemBuilder: (context, index) {
-          return
-            ListTile(
-            title: Text("${context.read<ContactProvider>().ContactList[index].name}",style: Theme.of(context).textTheme.bodyLarge,),
-            subtitle: Text("${context.read<ContactProvider>().ContactList[index].name}",),
-          );
-        },),
+            return ListTile(
+              leading: CircleAvatar(
+                backgroundImage: FileImage(File("${context.read<ContactProvider>().ContactList[index].img}")),
+              ),
+              title: Text(
+                "${context.read<ContactProvider>().ContactList[index].name}",
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              subtitle: Text(
+                "${context.read<ContactProvider>().ContactList[index].no}",
+              ),
+              trailing: IconButton(onPressed: () {
+                Navigator.pushNamed(context, 'detail',arguments: ['home',index]);
+              }, icon: Icon(Icons.arrow_circle_right_sharp)),
+            );
+          },
+        ),
       ),
-      );
+    );
   }
 }

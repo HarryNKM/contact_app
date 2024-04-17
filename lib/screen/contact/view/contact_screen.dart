@@ -98,6 +98,7 @@ class _ContactScreenState extends State<ContactScreen> {
                     style: Theme.of(context).textTheme.titleMedium),
                 content: TextFormField(
                   controller: txtxNo,
+                  keyboardType: TextInputType.phone,
                   style: Theme.of(context).textTheme.labelSmall,
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(), hintText: "Mobile Number"),
@@ -105,7 +106,10 @@ class _ContactScreenState extends State<ContactScreen> {
                     if (value!.isEmpty || value == null) {
                       return "Enter Mobile Number";
                     }
-                    return null;
+                    else if(value.length!=10)
+                      {
+                        return "Enter Valid Number";
+                      }
                   },
                 ),
               ),
@@ -123,7 +127,11 @@ class _ContactScreenState extends State<ContactScreen> {
                     if (value!.isEmpty || value == null) {
                       return "Enter Email";
                     }
-                    return null;
+                    else if(  !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                        .hasMatch(value))
+                    {
+                      return "Enter Valid Email";
+                    }
                   },
                 ),
               ),
@@ -140,6 +148,7 @@ class _ContactScreenState extends State<ContactScreen> {
                               no: txtxNo.text,
                               img: path);
                           context.read<ContactProvider>().addContact(m1);
+                          context.read<ContactProvider>().stepIndex=0;
                           Navigator.pop(context);
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
